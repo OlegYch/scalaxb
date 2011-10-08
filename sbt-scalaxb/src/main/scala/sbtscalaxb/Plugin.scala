@@ -40,11 +40,11 @@ object Plugin extends sbt.Plugin {
 
   lazy val scalaxbSettings: Seq[Project.Setting[_]] = inConfig(Compile)(baseScalaxbSettings)
   lazy val baseScalaxbSettings: Seq[Project.Setting[_]] = Seq(
-    scalaxb <<= generate in scalaxb,
+    scalaxb <<= (generate in scalaxb).identity,
     generate in scalaxb <<= (sources in scalaxb, scalaxbConfig in scalaxb,
         sourceManaged in scalaxb, logLevel in scalaxb) map { (sources, config, outdir, ll) =>
       ScalaxbCompile(sources, config, outdir, ll == Level.Debug) },
-    sourceManaged in scalaxb <<= sourceManaged,
+    sourceManaged in scalaxb <<= sourceManaged.identity,
     sources in scalaxb <<= (xsdSource in scalaxb, wsdlSource in scalaxb) map { (xsd, wsdl) =>
       (xsd ** "*.xsd").get ++ (wsdl ** "*.wsdl").get },
     xsdSource in scalaxb <<= (sourceDirectory, configuration) { (src, config) =>

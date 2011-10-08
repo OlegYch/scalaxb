@@ -2,8 +2,8 @@ import sbt._
 
 object Builds extends Build {
   import Keys._
-  import ScriptedPlugin._
-  import sbtappengine.Plugin._
+  // import ScriptedPlugin._
+  // import sbtappengine.Plugin._
   // import sbtscalaxb.Plugin._
   // import ScalaxbKeys._
 
@@ -87,22 +87,24 @@ trait Version { val version = "%s" }
 
   lazy val pluginSettings = buildSettings ++ Seq(
     sbtPlugin := true,
-    crossScalaVersions := Seq("2.9.1"),
-    publishMavenStyle := true) ++
-    ScriptedPlugin.scriptedSettings ++ Seq(
-    scriptedBufferLog := false
-  )
+    crossScalaVersions := Seq("2.8.1"),
+    publishMavenStyle := true,
+    version <<= (sbtVersion, version) { (sv, nv) => "sbt" + sv + "_" + nv }
+    ) // ++
+    // ScriptedPlugin.scriptedSettings ++ Seq(
+    // scriptedBufferLog := false
+  // )
 
-  lazy val webSettings = buildSettings ++
-    appengineSettings ++ Seq(
-    scalaVersion := "2.9.0-1",
-    crossScalaVersions := Seq("2.9.0-1", "2.8.1"),
-    libraryDependencies ++= Seq(
-      "net.databinder" %% "unfiltered-filter" % "0.4.0",
-      "net.databinder" %% "unfiltered-uploads" % "0.4.0",
-      "javax.servlet" % "servlet-api" % "2.3" % "provided"
-    )
-  ) ++ noPublish
+  // lazy val webSettings = buildSettings ++
+  //   appengineSettings ++ Seq(
+  //   scalaVersion := "2.9.0-1",
+  //   crossScalaVersions := Seq("2.9.0-1", "2.8.1"),
+  //   libraryDependencies ++= Seq(
+  //     "net.databinder" %% "unfiltered-filter" % "0.4.0",
+  //     "net.databinder" %% "unfiltered-uploads" % "0.4.0",
+  //     "javax.servlet" % "servlet-api" % "2.3" % "provided"
+  //   )
+  // ) ++ noPublish
 
   lazy val noPublish: Seq[Project.Setting[_]] = Seq(
     publish := {},
@@ -125,6 +127,6 @@ trait Version { val version = "%s" }
     settings = itSettings) dependsOn(cli % "test->compile")
   lazy val scalaxbPlugin = Project("sbt-scalaxb", file("sbt-scalaxb"),
     settings = pluginSettings) dependsOn(cli)
-  lazy val appengine = Project("web", file("web"),
-    settings = webSettings) dependsOn(cli)
+  // lazy val appengine = Project("web", file("web"),
+  //   settings = webSettings) dependsOn(cli)
 }
