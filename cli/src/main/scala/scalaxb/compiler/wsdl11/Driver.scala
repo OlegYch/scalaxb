@@ -57,6 +57,8 @@ class Driver extends Module { driver =>
     context.definitions foreach {processDefinition(_, context)}
   }
 
+  override def processSchema(schema: Schema, context: Context, cnfg: Config) {}
+
   def processDefinition(definition: XDefinitionsType, context: Context) {
     val ns = definition.targetNamespace map {_.toString}
 

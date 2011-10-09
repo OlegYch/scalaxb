@@ -272,6 +272,7 @@ trait Module {
         val output = toOutput(packageName(importable.targetNamespace, context), file)
         val out = evTo.toWriter(output)
         try {
+          processSchema(schema, context, config)
           val snippet = Snippet(headerSnippet(packageName(importable.targetNamespace, context)),
             generate(schema, context, config))
           snippets += snippet
@@ -305,7 +306,7 @@ trait Module {
       }
       output
     }
-
+    
     processImportables(importables.toList) :::
     processImportables(additionalImportables.toList) :::
     List(processProtocol) :::
@@ -369,7 +370,9 @@ trait Module {
   }
     
   def buildContext: Context
-  
+
+  def processSchema(schema: Schema, context: Context, config: Config): Unit
+
   def processContext(context: Context, config: Config): Unit
 
   def packageName(namespace: Option[String], context: Context): Option[String]

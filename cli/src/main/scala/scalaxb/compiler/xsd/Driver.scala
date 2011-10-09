@@ -37,7 +37,9 @@ class Driver extends Module { driver =>
   type RawSchema = scala.xml.Node
   
   override def buildContext = XsdContext()
-    
+
+  override def processSchema(schema: Schema, context: Context, cnfg: Config) {}
+
   override def processContext(context: Context, cnfg: Config) =
     (new ContextProcessor {
       val config = cnfg    
